@@ -9,41 +9,58 @@ uchar clamp(uchar x, uchar max, uchar min)
 	return x;
 }
 
+float clamp(float x, float max, float min)
+{
+	if (x > max)
+		x = max;
+	else if (x < min)
+		x = min;
+	return x;
+}
+
 Mat BgrToYuv(Mat& image)
 {
-	Mat result(image.size(), image.type());
-	//float Kr = 0.299, Kb = 0.114;
+	Mat result(image.size(), CV_32FC3);
+	int cols = result.cols, rows = result.rows;
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			Vec3f yuv;
+			yuv[0] = clamp(0.299f * image.at<Vec3b>(i, j)[0] + 0.587f * image.at<Vec3b>(i, j)[1] + 0.114f * image.at<Vec3b>(i, j)[2], 255.f, 0.f);
+			yuv[1] = clamp(0.492f * ((float)image.at<Vec3b>(i, j)[2] - yuv[0]), 125.46f, -125.46f);
+			yuv[2] = clamp(0.877f * ((float)image.at<Vec3b>(i, j)[0] - yuv[0]), 156.825f, -156.825f);
+		/*	yuv[0] = 0.2126f * image.at<Vec3b>(i, j)[2] + 0.7152f * image.at<Vec3b>(i, j)[1] + 0.0722f * image.at<Vec3b>(i, j)[0];
+			yuv[1] = -0.09991f * image.at<Vec3b>(i, j)[2] + -0.33609f * image.at<Vec3b>(i, j)[1] + 0.436f * image.at<Vec3b>(i, j)[0];
+			yuv[2] = 0.615f * image.at<Vec3b>(i, j)[2] + -0.55861f * image.at<Vec3b>(i, j)[1] + -0.05639f * image.at<Vec3b>(i, j)[0];*/
+			//std::cout << yuv[0] << "|" << yuv[1] << "|" << yuv[2] << std::endl;
+			result.at<Vec3f>(i, j)[0] = yuv[0];
+			result.at<Vec3f>(i, j)[1] = yuv[1];
+			result.at<Vec3f>(i, j)[2] = yuv[2];
+		}
+	}
+	return result;
+}
+
+Mat YuvToBgr(Mat& image)
+{
+	Mat result(image.size(), CV_8UC3);
 	int cols = image.cols, rows = image.rows;
 	for (int i = 0; i < rows; i++)
 	{
 		for (int j = 0; j < cols; j++)
 		{
-			//Vec3b yuv;
-			/*yuv[0] =  Kr * image.at<Vec3b>(i, j)[2] + (1 - Kr - Kb) * image.at<Vec3b>(i, j)[1] + Kb * image.at<Vec3b>(i, j)[0];
-			yuv[1] = image.at<Vec3b>(i, j)[0] - yuv[0];
-			yuv[2] = image.at<Vec3b>(i, j)[2] - yuv[0];*/
-			// 120
-			result.at<Vec3b>(i, j)[2] = clamp(0.299 * image.at<Vec3b>(i, j)[2] + 0.587 * image.at<Vec3b>(i, j)[1] + 0.114 * image.at<Vec3b>(i, j)[0], 255, 0);
-			result.at<Vec3b>(i, j)[1] = clamp(-0.147 * image.at<Vec3b>(i, j)[2] + -0.289 * image.at<Vec3b>(i, j)[1] + 0.437 * image.at<Vec3b>(i, j)[0], 111.44, -111.44);
-			result.at<Vec3b>(i, j)[0] = clamp(0.615 * image.at<Vec3b>(i, j)[2] + -0.515 * image.at<Vec3b>(i, j)[1] + -0.09 * image.at<Vec3b>(i, j)[0], 156.83, -154.49);
-		}
-	}
-	return result;
-	//Mat R(image.size(), image.type()), G(image.size(), image.type()), B(image.size(), image.type()),
-	//    Max(image.size(), image.type()), Min(image.size(), image.type());
-}
-
-Mat YuvToBgr(Mat& image)
-{
-	Mat result(image.size(), image.type());
-	int cols = image.cols, rows = image.rows;
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols; j++)
-		{ // Y = 2 U = 1 V = 0
-			result.at<Vec3b>(i, j)[2] = clamp(image.at<Vec3b>(i, j)[2] + -0.048 * image.at<Vec3b>(i, j)[1] + 1.138 * image.at<Vec3b>(i, j)[0], 255, 0);
-			result.at<Vec3b>(i, j)[1] = clamp(image.at<Vec3b>(i, j)[2] + -0.37 * image.at<Vec3b>(i, j)[1] + -0.579 * image.at<Vec3b>(i, j)[0], 111.44, -111.44);
-			result.at<Vec3b>(i, j)[0] = clamp(image.at<Vec3b>(i, j)[2] + 2.028 * image.at<Vec3b>(i, j)[1], 156.83, -154.49);
+			Vec3f yuv;
+			yuv[0] = image.at<Vec3f>(i, j)[0] + 1.13983f * image.at<Vec3f>(i, j)[2];
+			yuv[1] = image.at<Vec3f>(i, j)[0] + -0.39465f * image.at<Vec3f>(i, j)[1] + -0.58060f * image.at<Vec3f>(i, j)[2];
+			yuv[2] = image.at<Vec3f>(i, j)[0] + 2.03211f * image.at<Vec3f>(i, j)[1];
+			/*yuv[0] = image.at<Vec3f>(i, j)[0] + 0 * image.at<Vec3f>(i, j)[1] + 1.28033f * image.at<Vec3f>(i, j)[2];
+			yuv[1] = image.at<Vec3f>(i, j)[0] + -0.21482f * image.at<Vec3f>(i, j)[1] + -0.38059f * image.at<Vec3f>(i, j)[2];
+			yuv[2] = image.at<Vec3f>(i, j)[0] + 2.12798f * image.at<Vec3f>(i, j)[1];*/
+			/*std::cout << yuv[0] << "|" << yuv[1] << "|" << yuv[2] << std::endl;*/
+			result.at<Vec3b>(i, j)[0] = yuv[0];
+			result.at<Vec3b>(i, j)[1] = yuv[1];
+			result.at<Vec3b>(i, j)[2] = yuv[2];
 		}
 	}
 	return result;
@@ -57,8 +74,12 @@ void TestColorYUV(Mat& image)
 	Mat BGRImage = YuvToBgr(YUVImage);
 	namedWindow("BGR image", WINDOW_AUTOSIZE);
 	imshow("BGR image", BGRImage);
-	Mat BGR2YUVImage;
-	cvtColor(image, BGR2YUVImage, COLOR_BGR2YUV, 0);
-	namedWindow("Color BGR2YUV image", WINDOW_AUTOSIZE);
-	imshow("Color BGR2YUV image", BGR2YUVImage);
+	//Mat BGR2YUVImage;
+	//cvtColor(image, BGR2YUVImage, COLOR_RGB2YUV, 0);
+	//namedWindow("Color BGR2YUV image", WINDOW_AUTOSIZE);
+	//imshow("Color BGR2YUV image", BGR2YUVImage);
+	//Mat YVI2BGRImage;
+	//cvtColor(BGR2YUVImage, YVI2BGRImage, COLOR_YUV2RGB, 0);
+	//namedWindow("Color YUV2BGR image", WINDOW_AUTOSIZE);
+	//imshow("Color YUV2BGR image", YVI2BGRImage);
 }

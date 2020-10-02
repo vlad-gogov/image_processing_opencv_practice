@@ -8,9 +8,9 @@ Mat Average(Mat& image)
         for (int j = 0; j < image.cols; j++)
         {
             uchar mono = (image.at<Vec3b>(i, j)[0] + image.at<Vec3b>(i, j)[1] + image.at<Vec3b>(i, j)[2]) / 3;
-            result.at<Vec3b>(i, j)[0] = mono; //Blue
-            result.at<Vec3b>(i, j)[1] = mono; //Green
-            result.at<Vec3b>(i, j)[2] = mono; //Red
+            result.at<Vec3b>(i, j)[0] = mono;
+            result.at<Vec3b>(i, j)[1] = mono;
+            result.at<Vec3b>(i, j)[2] = mono;
         }
     }
     return result;
