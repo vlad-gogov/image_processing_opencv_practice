@@ -1,4 +1,5 @@
 #include "ShadeOfGray.h"
+#include "Metrics.h"
 
 Mat Average(Mat& image)
 {
@@ -18,6 +19,8 @@ Mat Average(Mat& image)
 
 void TestGray(Mat& image)
 {
+    std::cout << "------------------Test Gray------------------" << std::endl;
+
     Mat AverageImage = Average(image);
     namedWindow("Average image", WINDOW_AUTOSIZE);
     imshow("Average image", AverageImage);
@@ -25,4 +28,7 @@ void TestGray(Mat& image)
     cvtColor(image, BGR2GRAYImage, COLOR_BGR2GRAY, 0);
     namedWindow("Color BGR2GRAY image", WINDOW_AUTOSIZE);
     imshow("Color BGR2GRAY image", BGR2GRAYImage);
+
+    float err1 = Immse(AverageImage, BGR2GRAYImage);
+    std::cout << "Gray metirc: " << err1 << std::endl;
 }

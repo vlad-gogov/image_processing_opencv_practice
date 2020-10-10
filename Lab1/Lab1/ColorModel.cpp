@@ -115,6 +115,8 @@ void TimeTest(Mat& image)
 
 void TestColorYUV(Mat& image)
 {
+	std::cout << "------------------Test Color Model------------------" << std::endl;
+
 	Mat YUVImage = BgrToYuv(image);
 	namedWindow("YUV image", WINDOW_AUTOSIZE);
 	imshow("YUV image", YUVImage);
