@@ -1,5 +1,6 @@
 #include "ColorModel.h"
 #include "Metrics.h"
+#include "Timer.h"
 #include <ctime>
 
 template<typename T>
@@ -92,25 +93,22 @@ Mat BrightnessUpYUV(Mat& image, uchar temp)
 void TimeTest(Mat& image)
 {
 	Mat result;
-	float start = clock();
+	Timer t1;
 	for (int i = 0; i < 1000; i++)
 	{
 		result = BgrToYuv(image);
 	}
-	float end = clock();
-	float t = (end - start) / CLOCKS_PER_SEC;
+	
+	std::cout.precision(5);
+	std::cout << "Our time: " << t1.elapsed() << " seconds." << std::endl;
 
-	std::cout << "Our time: " << t << std::endl;
-
-	start = clock();
+	t1.reset();
 	for (int i = 0; i < 1000; i++)
 	{
 		cvtColor(image, result, COLOR_RGB2YUV, 0);
 	}
-	end = clock();
-	t = (end - start) / CLOCKS_PER_SEC;
 
-	std::cout << "OpenCV time: " << t << std::endl;
+	std::cout << "OpenCV time: " << t1.elapsed() << " seconds." << std::endl;
 }
 
 void TestColorYUV(Mat& image)
@@ -137,14 +135,22 @@ void TestColorYUV(Mat& image)
 	Mat BGR2YUVImage;
 	cvtColor(image, BGR2YUVImage, COLOR_RGB2YUV, 0);
 	namedWindow("Color BGR2YUV image", WINDOW_AUTOSIZE);
-	imshow("Color BGR2YUV image", BGR2YUVImage);
-	Mat YVI2BGRImage;
-	cvtColor(BGR2YUVImage, YVI2BGRImage, COLOR_YUV2RGB, 0);
+
+	Mat YUV2BGRImage;
+	cvtColor(BGR2YUVImage, YUV2BGRImage, COLOR_YUV2RGB, 0);
 	namedWindow("Color YUV2BGR image", WINDOW_AUTOSIZE);
-	imshow("Color YUV2BGR image", YVI2BGRImage);
+	imshow("Color YUV2BGR image", YUV2BGRImage);
 
 	float err1 = Immse(YUVImage, BGR2YUVImage);
-	float err2 = Immse(BGRImage, YVI2BGRImage);
+	float err2 = Immse(BGRImage, YUV2BGRImage);
+
+	//Save image
+	//imwrite("image/YUVImage.jpg", YUVImage);
+	//imwrite("image/BrigYUVImage.jpg", BrigYUVImage);
+	//imwrite("image/BGRImage.jpg", BGRImage);
+	//imwrite("image/BrigBGRImage.jpg", BrigBGRImage);
+	//imwrite("image/BGR2YUVImage.jpg", BGR2YUVImage);
+	//imwrite("image/YUV2BGRImage.jpg", YUV2BGRImage);
 
 	std::cout << "BGR to YUV: " << err1 << std::endl << "YUV to BGR: " << err2 << std::endl;
 }

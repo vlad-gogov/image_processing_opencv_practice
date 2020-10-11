@@ -24,11 +24,16 @@ void TestGray(Mat& image)
     Mat AverageImage = Average(image);
     namedWindow("Average image", WINDOW_AUTOSIZE);
     imshow("Average image", AverageImage);
+
     Mat BGR2GRAYImage;
     cvtColor(image, BGR2GRAYImage, COLOR_BGR2GRAY, 0);
     namedWindow("Color BGR2GRAY image", WINDOW_AUTOSIZE);
     imshow("Color BGR2GRAY image", BGR2GRAYImage);
 
     float err1 = Immse(AverageImage, BGR2GRAYImage);
-    std::cout << "Gray metirc: " << err1 << std::endl;
+    std::cout << "Gray metric: " << err1 << std::endl;
+
+    //Save image
+    //imwrite("image/AverageImage.jpg", AverageImage);
+    //imwrite("image/BGR2GRAYImage.jpg", BGR2GRAYImage);
 }

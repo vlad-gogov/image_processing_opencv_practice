@@ -149,12 +149,14 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Metrics.cpp" />
     <ClCompile Include="ShadeOfGray.cpp" />
+    <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColorModel.h" />
     <ClInclude Include="Metrics.h" />
     <ClInclude Include="OpenCV.h" />
     <ClInclude Include="ShadeOfGray.h" />
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
