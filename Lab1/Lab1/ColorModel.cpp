@@ -13,7 +13,7 @@ T clamp(T x, T max, T min)
 	return x;
 }
 
-Mat BgrToYuv(Mat& image)
+Mat BgrToYuv(Mat image)
 {
 	Mat result(image.size(), CV_8UC3);
 	int cols = result.cols, rows = result.rows;
@@ -35,7 +35,7 @@ Mat BgrToYuv(Mat& image)
 	return result;
 }
 
-Mat YuvToBgr(Mat& image)
+Mat YuvToBgr(Mat image)
 {
 	Mat result(image.size(), CV_8UC3);
 	int cols = image.cols, rows = image.rows;
@@ -56,7 +56,7 @@ Mat YuvToBgr(Mat& image)
 	return result;
 }
 
-Mat BrightnessUpBGR(Mat& image, int temp)
+Mat BrightnessUpBGR(Mat image, int temp)
 {
 	Mat result(image.size(), CV_8UC3);
 	int cols = image.cols, rows = image.rows;
@@ -73,7 +73,7 @@ Mat BrightnessUpBGR(Mat& image, int temp)
 	return result;
 }
 
-Mat BrightnessUpYUV(Mat& image, uchar temp)
+Mat BrightnessUpYUV(Mat image, int temp)
 {
 	Mat result(image.size(), image.type());
 	int cols = image.cols, rows = image.rows;
@@ -90,25 +90,26 @@ Mat BrightnessUpYUV(Mat& image, uchar temp)
 	return result;
 }
 
-void TimeTest(Mat& image)
+void TimeTest(Mat image)
 {
 	Mat result;
 	Timer t1;
 	for (int i = 0; i < 1000; i++)
 	{
-		result = BgrToYuv(image);
+		result = BrightnessUpBGR(image, 20);
 	}
 	
 	std::cout.precision(5);
-	std::cout << "Our time: " << t1.elapsed() << " seconds." << std::endl;
+	std::cout << "Brightness BGR time: " << t1.elapsed() << " seconds." << std::endl;
 
+	cvtColor(image, result, COLOR_RGB2YUV, 0);
 	t1.reset();
 	for (int i = 0; i < 1000; i++)
 	{
-		cvtColor(image, result, COLOR_RGB2YUV, 0);
+		result = BrightnessUpYUV(result, 20);
 	}
 
-	std::cout << "OpenCV time: " << t1.elapsed() << " seconds." << std::endl;
+	std::cout << "Brightness YUV time: " << t1.elapsed() << " seconds." << std::endl;
 }
 
 void TestColorYUV(Mat& image)
@@ -127,7 +128,7 @@ void TestColorYUV(Mat& image)
 	namedWindow("BGR image", WINDOW_AUTOSIZE);
 	imshow("BGR image", BGRImage);
 
-	Mat BrigBGRImage = BrightnessUpBGR(BGRImage, 50);
+	Mat BrigBGRImage = BrightnessUpBGR(BGRImage, 20);
 	namedWindow("Brig BGR image", WINDOW_AUTOSIZE);
 	imshow("Brig BGR image", BrigBGRImage);
 
@@ -135,14 +136,22 @@ void TestColorYUV(Mat& image)
 	Mat BGR2YUVImage;
 	cvtColor(image, BGR2YUVImage, COLOR_RGB2YUV, 0);
 	namedWindow("Color BGR2YUV image", WINDOW_AUTOSIZE);
+	imshow("Color BGR2YUV image", BGR2YUVImage);
 
 	Mat YUV2BGRImage;
 	cvtColor(BGR2YUVImage, YUV2BGRImage, COLOR_YUV2RGB, 0);
 	namedWindow("Color YUV2BGR image", WINDOW_AUTOSIZE);
 	imshow("Color YUV2BGR image", YUV2BGRImage);
 
-	float err1 = Immse(YUVImage, BGR2YUVImage);
-	float err2 = Immse(BGRImage, YUV2BGRImage);
+	Mat image1 = BrightnessUpBGR(image, 20);
+	Mat image2 = YuvToBgr(BrightnessUpYUV(BgrToYuv(image), 20));
+	float err1 = Immse(image1, image2);
+
+	cvtColor(image, image2, COLOR_BGR2YUV, 0);
+	image2 = BrightnessUpYUV(image2, 20);
+	cvtColor(image2, image2, COLOR_YUV2BGR);
+
+	float err2 = Immse(image1, image2);
 
 	//Save image
 	//imwrite("image/YUVImage.jpg", YUVImage);
@@ -152,5 +161,5 @@ void TestColorYUV(Mat& image)
 	//imwrite("image/BGR2YUVImage.jpg", BGR2YUVImage);
 	//imwrite("image/YUV2BGRImage.jpg", YUV2BGRImage);
 
-	std::cout << "BGR to YUV: " << err1 << std::endl << "YUV to BGR: " << err2 << std::endl;
+	std::cout << "Our convertation: " << err1 << std::endl << "OpenCV: " << err2 << std::endl;
 }
