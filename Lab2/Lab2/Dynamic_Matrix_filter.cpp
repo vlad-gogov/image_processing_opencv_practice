@@ -11,7 +11,7 @@ Vec3b Dynamic_Matrix_filter::calculateNewPixelColor(const Mat& image, int x, int
 		{
 			int X = clamp(x + j, image.rows - 1, 0);
 			int Y = clamp(y + i, image.cols - 1, 0);
-			Vec3b color = image.at<Vec3b>(i, j);
+			Vec3b color = image.at<Vec3b>(X, Y);
 			colors[k++] = color;
 		}
 	Vec3b color = calculatePropertyColor(colors, matrixSize);
@@ -26,9 +26,9 @@ Vec3b Dynamic_Matrix_filter::calculatePropertyColor(const Vec3b* colors, int col
 	int* blue = new int[colorsCount];
 	for (int i = 0; i < colorsCount; i++)
 	{
-		red[i] = colors[i][2];
+		red[i] = colors[i][0];
 		green[i] = colors[i][1];
-		blue[i] = colors[i][0];
+		blue[i] = colors[i][2];
 	}
 	int redMaximum = calculateProperty(red, colorsCount);
 	int greenMaximum = calculateProperty(green, colorsCount);

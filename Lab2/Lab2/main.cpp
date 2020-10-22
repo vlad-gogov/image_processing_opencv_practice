@@ -17,5 +17,10 @@ int main()
     namedWindow("Median image", WINDOW_AUTOSIZE);
     imshow("Median image", medianFilterImage);
 
+    Gaussian_blur_filter gaussianFilter;
+    Mat gaussianFilterImage = gaussianFilter.calculateNewImagePixMap(image);
+    namedWindow("Gaussian_blur_filter image", WINDOW_AUTOSIZE);
+    imshow("Gaussian_blur_filter image", gaussianFilterImage);
+
     waitKey(555555555555555);
 }
