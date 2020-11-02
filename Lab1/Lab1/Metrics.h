@@ -1,4 +1,4 @@
 #pragma once
 #include "OpenCV.h"
 
-double Immse(Mat& firstImage, Mat& secondImage);
+double Immse(const Mat& firstImage, const Mat& secondImage);
