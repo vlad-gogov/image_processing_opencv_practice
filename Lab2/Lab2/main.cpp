@@ -36,19 +36,19 @@ int main()
     Timer t1;
     Mat gaussianFilterImage = gaussianFilter.calculateNewImagePixMap(noise);
     std::cout << "gaussianFilter time: " << t1.elapsed() << std::endl;
-    imwrite("gaussianFilter.jpg", gaussianFilterImage);
+    imwrite("image/gaussianFilter.jpg", gaussianFilterImage);
 
     Median_filter medianFilter(3);
     t1.reset();
     Mat medianFilterImage = medianFilter.calculateNewImagePixMap(noise);
     std::cout << "medianFilter time: " << t1.elapsed() << std::endl;
-    imwrite("medianFilter.jpg", medianFilterImage);
+    imwrite("image/medianFilter.jpg", medianFilterImage);
 
     Mat openCVMedian;
     t1.reset();
     medianBlur(noise, openCVMedian, 3);
     std::cout << "openCVMedian time: " << t1.elapsed() << std::endl;
-    imwrite("openCVMedian.jpg", openCVMedian);
+    imwrite("image/openCVMedian.jpg", openCVMedian);
 
     waitKey(555555555555555);
 }
