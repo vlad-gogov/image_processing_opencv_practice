@@ -4,7 +4,7 @@ Mat createSaltAndPepper(const Mat& image)
 {
     if (image.channels() != 1)
     {
-        throw "dasdads";
+        throw "The image contains more than 1 channel.";
     }
     Mat result(image);
     Mat saltpepper_noise = Mat::zeros(image.rows, image.cols, CV_8U);

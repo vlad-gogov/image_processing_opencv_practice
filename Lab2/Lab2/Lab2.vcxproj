@@ -122,7 +122,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Program Files\opencv\build\x64\vc15\lib;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_world440d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world450d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -141,26 +141,20 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Program Files\opencv\build\x64\vc15\lib;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_world440.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world450.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Base_Matrix_filter.cpp" />
-    <ClCompile Include="Dynamic_Matrix_filter.cpp" />
-    <ClCompile Include="Filter.cpp" />
-    <ClCompile Include="Gaussian_blur_filter.cpp" />
+    <ClCompile Include="Filters.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Matrix_filter.cpp" />
-    <ClCompile Include="Median_filter.cpp" />
+    <ClCompile Include="Noise_filter.cpp" />
+    <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Base_Matrix_Filter.h" />
-    <ClInclude Include="Dynamic_Matrix_filter.h" />
-    <ClInclude Include="Filter.h" />
-    <ClInclude Include="Gaussian_blur_filter.h" />
-    <ClInclude Include="Matrix_filter.h" />
-    <ClInclude Include="Median_filter.h" />
+    <ClInclude Include="Filters.h" />
+    <ClInclude Include="Noise_filter.h" />
     <ClInclude Include="OpenCV.h" />
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
