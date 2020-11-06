@@ -51,7 +51,7 @@ int main()
     t1.reset();
     try
     {
-        gaussianImage = gaussian(greyImage, 3);
+        gaussianImage = gaussian(greyImage, 1, 3);
     }
     catch (const char* message)
     {
