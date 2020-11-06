@@ -32,7 +32,7 @@ int main()
     Timer t1;
     try
     {
-        medianImage = median(greyImage, 3);
+        medianImage = median(noise, 3);
     }
     catch (const char* message)
     {
@@ -43,7 +43,7 @@ int main()
 
     Mat openCVMedian;
     t1.reset();
-    medianBlur(noise, openCVMedian, 3);
+    medianBlur(noise, openCVMedian, 7);
     std::cout << "openCVMedian time: " << t1.elapsed() << std::endl;
     imwrite("image/openCVMedian.jpg", openCVMedian);
 
@@ -51,7 +51,7 @@ int main()
     t1.reset();
     try
     {
-        gaussianImage = gaussian(greyImage, 1, 3);
+        gaussianImage = gaussian(noise, 1, 3);
     }
     catch (const char* message)
     {
