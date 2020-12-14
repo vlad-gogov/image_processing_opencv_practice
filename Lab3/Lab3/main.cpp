@@ -10,10 +10,10 @@ int main()
 
     Mat our_edges;
     Mat cv_edges;
-    Timer time;
-
+    
     houghLine(input);
-
+    
+    Timer time;
     time.elapsed();
     CannyEdgeDetector(input, our_edges, 50, 0);
     std::cout << "Our time: " << time.elapsed() << std::endl;
