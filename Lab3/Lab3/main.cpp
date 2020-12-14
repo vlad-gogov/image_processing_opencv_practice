@@ -12,7 +12,7 @@ int main()
     Mat cv_edges;
     Timer time;
 
-    houghLine(input, 100000);
+    houghLine(input);
 
     time.elapsed();
     CannyEdgeDetector(input, our_edges, 50, 0);
