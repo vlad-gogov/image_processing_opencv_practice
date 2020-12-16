@@ -1,19 +1,17 @@
 ﻿#include "OpenCV.h"
 #include "Canny.h"
-#include "Hough.h"
 #include "Timer.h"
+#include "Watershed.h"
 
 int main()
 {
     Mat input;
-    input = imread("image.jpg", 0); //reads as greyscale
+    input = imread("image.jpg", 0);
 
     Mat our_edges;
     Mat cv_edges;
-    
-    houghLine(input);
-    
     Timer time;
+    /**********************************Canny algorithm************************************************/
     time.elapsed();
     CannyEdgeDetector(input, our_edges, 50, 0);
     std::cout << "Our time: " << time.elapsed() << std::endl;
@@ -23,6 +21,9 @@ int main()
     time.elapsed();
     Canny(input, cv_edges, 80, 0);
     std::cout << "OpenCV time: " << time.elapsed();
+    /**********************************Watershed algorithm************************************************/
+    cout << "Watershed result" << endl;
+    doWatershed();
 
     std::string s1 = "edge";
     std::string s2 = "image";
